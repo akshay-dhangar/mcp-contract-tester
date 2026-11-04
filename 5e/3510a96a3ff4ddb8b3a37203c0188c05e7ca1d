@@ -1,0 +1,35 @@
+cmd/contract-check/main_test.go
+  s_eb0b26e52cc031::t_a189a4b886e593 1-22
+examples/present.json
+  s_eb0b26e52cc031::t_a189a4b886e593 1
+README.md
+  s_eb0b26e52cc031::t_a189a4b886e593 25-36
+ROADMAP.md
+  s_eb0b26e52cc031::t_a189a4b886e593 5,7
+cmd/contract-check/main.go
+  s_eb0b26e52cc031::t_a189a4b886e593 1-26
+check.go
+  s_eb0b26e52cc031::t_a189a4b886e593 1-45
+examples/missing.json
+  s_eb0b26e52cc031::t_a189a4b886e593 1
+check_test.go
+  s_eb0b26e52cc031::t_a189a4b886e593 1-25
+PROGRESS.md
+  s_eb0b26e52cc031::t_a189a4b886e593 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "5e3510a96a3ff4ddb8b3a37203c0188c05e7ca1d",
+  "prompts": {},
+  "sessions": {
+    "s_eb0b26e52cc031": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    }
+  }
+}
