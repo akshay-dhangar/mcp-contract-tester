@@ -22,3 +22,15 @@ See [ROADMAP.md](ROADMAP.md) for seven bounded development days and acceptance c
 ## Evidence
 
 The current automated checks validate the small implemented component only. They do not establish end-to-end AI quality, scalability, or production readiness. Later demos and LinkedIn write-ups should cite measured behavior and disclosed limitations.
+
+## Required-presence CLI
+
+```sh
+go build -o /tmp/contract-check ./cmd/contract-check
+/tmp/contract-check < examples/present.json
+/tmp/contract-check < examples/missing.json
+```
+
+The second example emits sorted missing names and exits 2. Exit 0 means all named keys are present; exit 1 means malformed/oversized input or an output failure. Input is capped at 1 MiB and must contain exactly one object with `required` (string array) and `arguments` (object). Unknown envelope fields are rejected. Duplicate required names are deduplicated. Empty property names are allowed. Null, false and zero values count as present: this is not type validation.
+
+This offline fixture envelope is our own CLI format, not an MCP wire message or JSON Schema implementation. No server is contacted. Full schema validation, MCP transport, protocol errors/timeouts and report packaging remain future milestones.
