@@ -42,3 +42,11 @@ This offline fixture envelope is our own CLI format, not an MCP wire message or 
 Unsupported schema keywords are rejected, never silently ignored. This is not full JSON Schema validation or MCP protocol testing. It does not validate nested properties/items, required keys, bounds, references or formats. Input is limited to 1 MiB; top-level numeric tokens to 256 characters and exponent magnitude 1000. Values outside these supported limits are errors, not type mismatches.
 
 Semantics reference: [official JSON Schema type documentation](https://json-schema.org/understanding-json-schema/reference/type). Type-only checks intentionally implement a limited subset.
+
+## Stdio framing foundation
+
+The Go `FrameReader`/`WriteFrame` API reads and writes newline-delimited UTF-8 JSON-RPC envelopes with a 1 MiB message limit. It rejects malformed envelopes, embedded literal newlines, invalid IDs, conflicting result/error fields and truncated frames. Discard the reader after an error. Writers detect short writes; readers propagate EOF and I/O errors.
+
+This is the framing layer for a future local transport adapter. It does not launch subprocesses, enforce I/O deadlines, initialize MCP sessions, match response IDs, or validate method-specific payloads. It is not a complete MCP client. The caller must supply trusted streams and manage their lifecycle. Null response IDs are deliberately unsupported in this MCP-focused subset.
+
+Reference: [MCP 2025-11-25 stdio transport](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports). This milestone targets that documented version rather than claiming support for every protocol version.

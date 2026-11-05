@@ -9,3 +9,7 @@ No MCP protocol or JSON Schema conformance is claimed. Next: supported schema ty
 ## Type-keyword milestone
 
 Added a bounded standalone type checker for seven JSON types and unions. Exact rational numeric handling distinguishes fractional values beyond float64 precision. Unsupported schema keywords and numeric limits fail closed. Tests cover integer decimals/exponents, nullable unions, primitives, malformed schemas and unsupported constraints. Official JSON Schema type documentation consulted. Next: local MCP transport adapter; full schema and protocol conformance remain unimplemented.
+
+## 5 November — stdio framing foundation
+
+Implemented bounded newline-delimited UTF-8 JSON-RPC reading/writing after consulting the versioned MCP transport specification. Tests cover request/notification/result/error round trips, consecutive frames, EOF, invalid envelopes, oversized input, truncated input and short writes. This completes only the framing portion of Day 3. Subprocess lifecycle, initialization, response matching and deadlines remain next; Day 3 stays unchecked.
