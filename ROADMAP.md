@@ -5,7 +5,7 @@ Goal: Test MCP tool contracts and failure behavior.
 Status: active. Required-presence CLI and fixtures implemented; full MVP incomplete.
 
 - [x] Day 1: Required-argument validation and fixtures.
-- [ ] Day 2: Validate supported JSON Schema types.
+- [x] Day 2: Validate supported JSON Schema types.
 - [ ] Day 3: Add local MCP transport adapter.
 - [ ] Day 4: Exercise timeouts and protocol errors.
 - [ ] Day 5: Generate actionable contract reports.
