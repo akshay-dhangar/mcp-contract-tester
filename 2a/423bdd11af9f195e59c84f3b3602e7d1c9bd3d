@@ -1,0 +1,31 @@
+typecheck.go
+  s_90026bd1685103::t_331692c8fafe7c 1-101
+typecheck_test.go
+  s_90026bd1685103::t_331692c8fafe7c 1-25
+README.md
+  s_90026bd1685103::t_331692c8fafe7c 37-44
+cmd/type-check/main.go
+  s_90026bd1685103::t_331692c8fafe7c 1-22
+ROADMAP.md
+  s_90026bd1685103::t_331692c8fafe7c 8
+examples/types.json
+  s_90026bd1685103::t_331692c8fafe7c 1
+PROGRESS.md
+  s_90026bd1685103::t_331692c8fafe7c 8-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "2a423bdd11af9f195e59c84f3b3602e7d1c9bd3d",
+  "prompts": {},
+  "sessions": {
+    "s_90026bd1685103": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "unknown"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    }
+  }
+}
