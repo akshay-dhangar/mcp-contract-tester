@@ -6,7 +6,7 @@ Status: active. Required-presence CLI and fixtures implemented; full MVP incompl
 
 - [x] Day 1: Required-argument validation and fixtures.
 - [x] Day 2: Validate supported JSON Schema types.
-- [ ] Day 3: Add local MCP transport adapter.
+- [x] Day 3: Add local MCP transport adapter.
 - [ ] Day 4: Exercise timeouts and protocol errors.
 - [ ] Day 5: Generate actionable contract reports.
 - [ ] Day 6: Run against a deterministic example server.

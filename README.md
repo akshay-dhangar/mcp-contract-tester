@@ -50,3 +50,9 @@ The Go `FrameReader`/`WriteFrame` API reads and writes newline-delimited UTF-8 J
 This is the framing layer for a future local transport adapter. It does not launch subprocesses, enforce I/O deadlines, initialize MCP sessions, match response IDs, or validate method-specific payloads. It is not a complete MCP client. The caller must supply trusted streams and manage their lifecycle. Null response IDs are deliberately unsupported in this MCP-focused subset.
 
 Reference: [MCP 2025-11-25 stdio transport](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports). This milestone targets that documented version rather than claiming support for every protocol version.
+
+## Probe a local MCP server
+
+Run `go run ./cmd/mcp-probe -timeout 5s -- /absolute/path/to/trusted-server [args...]`. The probe launches that executable directly with the current user's environment, checks the response ID, protocol version, capabilities object and server identity, sends the initialized notification, and closes stdin. A successful exit prints the server name and version as JSON. The deadline covers the whole exchange including server exit. The probe can terminate its direct child on failure or timeout.
+
+This discovery probe targets version 2025-11-25 and expects the initialize reply as the first incoming frame. Tool calls, interleaved messages and process-tree isolation are outside its scope. See the [MCP lifecycle specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle).
