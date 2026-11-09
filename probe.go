@@ -14,27 +14,38 @@ type ServerIdentity struct {
 	Version string `json:"version"`
 }
 
+// ProbeError identifies the lifecycle stage while preserving errors.Is/As.
+type ProbeError struct {
+	Stage string
+	Err   error
+}
+
+func (e *ProbeError) Error() string { return e.Stage + ": " + e.Err.Error() }
+func (e *ProbeError) Unwrap() error { return e.Err }
+
+func probeError(stage string, err error) error { return &ProbeError{Stage: stage, Err: err} }
+
 // Probe starts a trusted executable and completes one initialization exchange.
 // The deadline covers startup, handshake and shutdown.
 func Probe(parent context.Context, timeout time.Duration, executable string, args ...string) (ServerIdentity, error) {
 	if timeout <= 0 || timeout > time.Minute {
-		return ServerIdentity{}, fmt.Errorf("timeout must be positive and at most one minute")
+		return ServerIdentity{}, probeError("configuration", fmt.Errorf("timeout must be positive and at most one minute"))
 	}
 	ctx, cancel := context.WithTimeout(parent, timeout)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, executable, args...)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
-		return ServerIdentity{}, err
+		return ServerIdentity{}, probeError("startup", err)
 	}
 	defer stdin.Close()
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		return ServerIdentity{}, err
+		return ServerIdentity{}, probeError("startup", err)
 	}
 	defer stdout.Close()
 	if err = cmd.Start(); err != nil {
-		return ServerIdentity{}, err
+		return ServerIdentity{}, probeError("startup", err)
 	}
 	// Closing both ends also interrupts blocked I/O when descendants inherit a pipe.
 	stop := context.AfterFunc(ctx, func() { stdin.Close(); stdout.Close() })
@@ -46,13 +57,17 @@ func Probe(parent context.Context, timeout time.Duration, executable string, arg
 	}
 	waitErr := cmd.Wait()
 	if ctx.Err() != nil {
-		return ServerIdentity{}, ctx.Err()
+		stage := "shutdown"
+		if exchangeErr != nil {
+			stage = "initialize"
+		}
+		return ServerIdentity{}, probeError(stage, ctx.Err())
 	}
 	if exchangeErr != nil {
-		return ServerIdentity{}, exchangeErr
+		return ServerIdentity{}, probeError("initialize", exchangeErr)
 	}
 	if waitErr != nil {
-		return ServerIdentity{}, fmt.Errorf("server exit: %w", waitErr)
+		return ServerIdentity{}, probeError("shutdown", fmt.Errorf("server exit: %w", waitErr))
 	}
 	return identity, nil
 }
@@ -85,8 +100,11 @@ func initialize(out io.Writer, in *FrameReader) (ServerIdentity, error) {
 		return ServerIdentity{}, fmt.Errorf("initialize RPC error %d", reply.Error.Code)
 	}
 	r := reply.Result
-	if r.ProtocolVersion != "2025-11-25" || r.Capabilities == nil || r.ServerInfo.Name == "" || r.ServerInfo.Version == "" {
-		return ServerIdentity{}, fmt.Errorf("incompatible or incomplete initialize result")
+	if r.ProtocolVersion != "2025-11-25" {
+		return ServerIdentity{}, fmt.Errorf("unsupported protocol version; expected 2025-11-25")
+	}
+	if r.Capabilities == nil || r.ServerInfo.Name == "" || r.ServerInfo.Version == "" {
+		return ServerIdentity{}, fmt.Errorf("initialize result requires capabilities and nonempty server name/version")
 	}
 	if err = WriteFrame(out, []byte(`{"jsonrpc":"2.0","method":"notifications/initialized"}`)); err != nil {
 		return ServerIdentity{}, err

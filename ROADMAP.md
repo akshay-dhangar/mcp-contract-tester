@@ -7,7 +7,7 @@ Status: active. Required-presence CLI and fixtures implemented; full MVP incompl
 - [x] Day 1: Required-argument validation and fixtures.
 - [x] Day 2: Validate supported JSON Schema types.
 - [x] Day 3: Add local MCP transport adapter.
-- [ ] Day 4: Exercise timeouts and protocol errors.
+- [x] Day 4: Exercise timeouts and protocol errors.
 - [ ] Day 5: Generate actionable contract reports.
 - [ ] Day 6: Run against a deterministic example server.
 - [ ] Day 7: Package CLI, document scope and demonstrate failures.
@@ -22,3 +22,7 @@ Status: active. Required-presence CLI and fixtures implemented; full MVP incompl
 - Real model quality is not claimed without a live evaluation.
 
 Seven days is a target. Reduce scope or record unfinished work explicitly; never mark a project complete merely because its week ended.
+
+## 9 November target-date assessment
+
+MVP incomplete. Days 5–7 carry over: structured actionable reports, deterministic example server, packaged demo and evidence-based LinkedIn draft. Keep this project active until those acceptance checks pass; revised target 12 November, subject to validation.
