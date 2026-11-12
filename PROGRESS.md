@@ -27,3 +27,7 @@ Day 4 is complete. The seven-day target ends with Days 5–7 unfinished; carryov
 ## 12 November — structured probe reports
 
 Added opt-in versioned JSON success/failure reports with stage, machine-readable deadline/cancellation code, diagnostic and remediation hint. Default CLI output stays compatible. Tests exercise subprocess success, launch/configuration failures, wrapped error classification, usage errors and report writer failures. go vet and go test -race passed locally. Day 5 complete; deterministic server and demo/LinkedIn evidence remain carryover. No completed MVP claim.
+
+## 12 November — deterministic server and packaged demo
+
+Added the purpose-built example-server fixture and scripts/demo.py. All seven CLI scenarios pass locally, alongside vet/race tests. CI now runs the same demo. docs/DEMO.md records expected results and narrowed MVP limits; an unpublished LinkedIn draft is saved. Days 6–7 and local acceptance are complete; remote CI verification is required before portfolio advancement.

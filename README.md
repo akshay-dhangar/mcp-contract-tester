@@ -2,7 +2,7 @@
 
 Test MCP tool contracts and failure behavior.
 
-**Status: initial working component; full MVP is planned, not complete.**
+**Status: scoped local MVP implemented. This is not a full MCP conformance suite.**
 
 Implemented now: offline required-argument and type checks, bounded stdio framing, and a one-shot MCP initialization probe with lifecycle diagnostics.
 
@@ -73,3 +73,9 @@ go build -o /tmp/mcp-probe ./cmd/mcp-probe
 `-report` emits one JSON object on stdout on probe success or failure: `report_version: 1`, `check: "stdio_initialization"`, and `passed`. Success includes `server`; failure includes `stage`, `code`, `message` and a stage-specific `hint`. Codes are `deadline_exceeded`, `canceled`, or `probe_failed`; stage and code are intended for automation, while message wording may change. Exit 0 means success; exit 1 means probe, usage or output failure. Invalid CLI flags and missing executables in the command line (no positional argument) produce usage diagnostics on stderr, not a report. An output-write failure also goes to stderr.
 
 Without `-report`, the existing server-identity JSON and stderr diagnostics are preserved. Reports omit executable arguments and environment values, but OS errors can include local paths and successful reports include server-supplied identity. Review artifacts before sharing them. This report covers only initialization and shutdown; it does not establish tool-call or full schema conformance.
+
+## Reproduce the scoped MVP
+
+Requires Go 1.25, Python 3 and a POSIX shell for the existing subprocess tests. From the repository root, run `python3 scripts/demo.py`. It builds four CLIs into a temporary directory, checks seven deterministic scenarios and removes the binaries afterward. The same demo runs in CI. See [docs/DEMO.md](docs/DEMO.md) for expected results and limits.
+
+The `example-server` executable is a purpose-built handshake fixture with `-mode success`, `wrong-id`, `wrong-version` or `rpc-error`. It expects this probe's ID 1 and exits after stdin closes. It does not implement tools or serve as an independent conformance oracle.
