@@ -23,3 +23,7 @@ The mcp-probe CLI starts a trusted local executable and verifies a version-pinne
 Added ProbeError stages (configuration, startup, initialize, shutdown) with wrapped causes for errors.Is/As. Initialization failures distinguish unsupported protocol versions from missing identity/capabilities; RPC diagnostics omit remote message/data. Regression cases cover malformed and incompatible replies, unsolicited notifications, missing executable, pre-canceled context, invalid deadlines, early EOF, nonzero exit and post-handshake shutdown hangs. Local go vet and go test -race passed.
 
 Day 4 is complete. The seven-day target ends with Days 5–7 unfinished; carryover is explicit in ROADMAP.md. Next: structured actionable CLI reports, then a deterministic example server and packaged demo. No full MCP conformance or live-model quality claim.
+
+## 12 November — structured probe reports
+
+Added opt-in versioned JSON success/failure reports with stage, machine-readable deadline/cancellation code, diagnostic and remediation hint. Default CLI output stays compatible. Tests exercise subprocess success, launch/configuration failures, wrapped error classification, usage errors and report writer failures. go vet and go test -race passed locally. Day 5 complete; deterministic server and demo/LinkedIn evidence remain carryover. No completed MVP claim.

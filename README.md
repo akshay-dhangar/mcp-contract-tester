@@ -61,4 +61,15 @@ This discovery probe targets version 2025-11-25 and expects the initialize reply
 
 Errors identify the failing lifecycle stage: `configuration` for invalid deadlines, `startup` for launch errors, `initialize` for handshake failures, and `shutdown` for failure to exit cleanly after initialization. For example, `initialize: unsupported protocol version; expected 2025-11-25` means the server must support the pinned version; `shutdown: context deadline exceeded` means initialization succeeded but the server did not exit within the total timeout. Check that it exits when stdin closes.
 
-Go callers can inspect `*ProbeError` using `errors.As` and detect deadlines/cancellation with `errors.Is`. Server RPC errors include their numeric code but omit their message/data. This is not a general redaction guarantee for all OS errors. Only the direct child is terminated; run trusted executables. Automated failure tests include malformed replies, unsupported versions, cancellation, early EOF, nonzero exits and shutdown hangs. Structured JSON failure reports remain planned.
+Go callers can inspect `*ProbeError` using `errors.As` and detect deadlines/cancellation with `errors.Is`. Server RPC errors include their numeric code but omit their message/data. This is not a general redaction guarantee for all OS errors. Only the direct child is terminated; run trusted executables. Automated failure tests include malformed replies, unsupported versions, cancellation, early EOF, nonzero exits and shutdown hangs. Structured JSON reports are available with `-report`.
+
+### Save a probe report
+
+```sh
+go build -o /tmp/mcp-probe ./cmd/mcp-probe
+/tmp/mcp-probe -report -timeout 5s -- /absolute/path/to/trusted-server > report.json
+```
+
+`-report` emits one JSON object on stdout on probe success or failure: `report_version: 1`, `check: "stdio_initialization"`, and `passed`. Success includes `server`; failure includes `stage`, `code`, `message` and a stage-specific `hint`. Codes are `deadline_exceeded`, `canceled`, or `probe_failed`; stage and code are intended for automation, while message wording may change. Exit 0 means success; exit 1 means probe, usage or output failure. Invalid CLI flags and missing executables in the command line (no positional argument) produce usage diagnostics on stderr, not a report. An output-write failure also goes to stderr.
+
+Without `-report`, the existing server-identity JSON and stderr diagnostics are preserved. Reports omit executable arguments and environment values, but OS errors can include local paths and successful reports include server-supplied identity. Review artifacts before sharing them. This report covers only initialization and shutdown; it does not establish tool-call or full schema conformance.
